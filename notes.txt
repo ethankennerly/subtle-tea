@@ -1,11 +1,11 @@
 FEATURES
 	Random position.
 	If click near circle, increase score.  
+	if click fast, increase score.
+	After 10 trials, return to menu.
 
 TODO
-	if click fast, increase score.
 	random time to place.
-	after 12 trials, return to menu.
 	difficulty levels:
 		opacity
 		scale

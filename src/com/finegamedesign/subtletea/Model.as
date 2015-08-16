@@ -10,11 +10,14 @@ package com.finegamedesign.subtletea
         internal var levelScore:int = 0;
         internal var selected:Object = {x: -1, y: -1};
         internal var target:Object = {x: -1, y: -1};
+        internal var trial:int = 0;
+        internal var trialMax:int = 10;
         private var bounds:Object = {
             topLeft: {x: 0, y: 0},
             bottomRight: {x: 100, y: 100}};
         private var distance:int;
         private var now:int;
+        private var complete:Boolean;
         private var elapsed:Number;
         private var previousTime:int;
         private var populateTime:int;
@@ -45,13 +48,17 @@ package com.finegamedesign.subtletea
 
         internal function populate(level:int):void
         {
-            this.level = level;
-            if (null == levelScores[level]) {
-                levelScores[level] = 0;
-                levelScore = 0;
+            complete = trial < trialMax;
+            if (!complete) {
+                this.level = level;
+                if (null == levelScores[level]) {
+                    levelScores[level] = 0;
+                    levelScore = 0;
+                }
+                randomlyPlace(target, bounds);
+                populateTime = now;
+                trial++;
             }
-            randomlyPlace(target, bounds);
-            populateTime = now;
         }
 
         internal function clear():void
@@ -109,6 +116,9 @@ package com.finegamedesign.subtletea
         private function win():int
         {
             var winning:int = 0;
+            if (complete) {
+                winning = 1;
+            }
             return winning;
         }
 

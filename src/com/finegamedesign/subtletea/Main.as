@@ -42,8 +42,8 @@ package com.finegamedesign.subtletea
         public var background:MovieClip;
         public var feedback:MovieClip;
         public var highScore_txt:TextField;
-        public var level_txt:TextField;
-        public var maxLevel_txt:TextField;
+        public var trial_txt:TextField;
+        public var trialMax_txt:TextField;
         public var room:MovieClip;
         public var score_txt:TextField;
         public var returnToMenu_btn:SimpleButton;
@@ -113,6 +113,7 @@ package com.finegamedesign.subtletea
         {
             inTrial = true;
             mouseChildren = true;
+            model.trial = 0;
             model.populate(level);
             view.populate(model, this);
         }
@@ -122,8 +123,8 @@ package com.finegamedesign.subtletea
             // trace("updateHudText: ", score, highScore);
             score_txt.text = Model.score.toString();
             // highScore_txt.text = Model.highScore.toString();
-            // level_txt.text = level.toString();
-            // maxLevel_txt.text = maxLevel.toString();
+            trial_txt.text = model.trial.toString();
+            trialMax_txt.text = model.trialMax.toString();
         }
 
         private function update(event:Event):void
