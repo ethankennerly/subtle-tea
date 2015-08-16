@@ -4,6 +4,7 @@ package com.finegamedesign.subtletea
     import flash.display.SimpleButton;
     import flash.events.Event;
     import flash.events.MouseEvent;
+    import flash.geom.Rectangle;
     import flash.media.Sound;
     import flash.media.SoundChannel;
     import flash.text.TextField;
@@ -45,9 +46,10 @@ package com.finegamedesign.subtletea
         public var maxLevel_txt:TextField;
         public var room:MovieClip;
         public var score_txt:TextField;
-        public var restartTrial_btn:SimpleButton;
+        public var returnToMenu_btn:SimpleButton;
 
         private var inTrial:Boolean;
+        private var controller:Controller;
         private var level:int;
         private var maxLevel:int;
         private var model:Model;
@@ -71,10 +73,14 @@ package com.finegamedesign.subtletea
             LevelSelect.onSelect = load;
             LevelLoader.onLoaded = trial;
             model = new Model();
+            var bounds:Rectangle = background.bounds.getBounds(background);
+            var target:Rectangle = background.target.getBounds(background);
+            model.setBounds(bounds, target);
             view = new View();
+            controller = new Controller(model, this);
             updateHudText();
             addEventListener(Event.ENTER_FRAME, update, false, 0, true);
-            restartTrial_btn.addEventListener(MouseEvent.CLICK, restartTrial, false, 0, true);
+            returnToMenu_btn.addEventListener(MouseEvent.CLICK, returnToMenu, false, 0, true);
             // API.connect(root, "", "");
         }
 
@@ -86,10 +92,10 @@ package com.finegamedesign.subtletea
             }
         }
 
-        private function restartTrial(e:MouseEvent):void
+        private function returnToMenu(e:MouseEvent):void
         {
             reset();
-            view.clear();
+            controller.clear();
             next();
             // lose();
         }
@@ -131,7 +137,7 @@ package com.finegamedesign.subtletea
                 FlxKongregate.init(FlxKongregate.connect);
             }
             if (inTrial) {
-                var win:int = model.update(now);
+                var win:int = controller.update(now);
                 view.update();
                 result(win);
             }

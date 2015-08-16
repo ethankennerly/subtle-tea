@@ -1,9 +1,5 @@
 package com.finegamedesign.subtletea
 {
-    import flash.display.DisplayObject;
-    import flash.geom.Point;
-    import flash.geom.Rectangle;
-
     public class Model
     {
         internal static var levelScores:Array = [];
@@ -12,8 +8,12 @@ package com.finegamedesign.subtletea
         internal var highScore:int;
         internal var level:int;
         internal var levelScore:int;
-        internal var target:Point;
-        private var min:Number = 0.0001;
+        internal var selected:Object = {x: -1, y: -1};
+        internal var target:Object = {x: -1, y: -1};
+        private var bounds:Object = {
+            topLeft: {x: 0, y: 0},
+            bottomRight: {x: 100, y: 100}};
+        private var distance:int;
         private var now:int;
         private var elapsed:Number;
         private var previousTime:int;
@@ -23,7 +23,23 @@ package com.finegamedesign.subtletea
             score = 0;
             highScore = 0;
             levelScores = [];
-            target = new Point();
+        }
+
+        internal function setBounds(rectangle:Object, targetRectangle:Object, margin:int = 20):void
+        {
+            bounds.topLeft.x = Math.ceil(rectangle.topLeft.x + targetRectangle.width + margin);
+            bounds.topLeft.y = Math.ceil(rectangle.topLeft.y + targetRectangle.height + margin);
+            bounds.bottomRight.x = Math.floor(rectangle.bottomRight.x - targetRectangle.width - margin);
+            bounds.bottomRight.y = Math.floor(rectangle.bottomRight.y - targetRectangle.height - margin);
+            
+            bounds.width = bounds.bottomRight.x - bounds.topLeft.x;
+            bounds.height = bounds.bottomRight.y - bounds.topLeft.y;
+        }
+
+        private static function randomlyPlace(target:Object, bounds:Object):void
+        {
+            target.x = Math.round(Math.random() * bounds.width + bounds.topLeft.x);
+            target.y = Math.round(Math.random() * bounds.height + bounds.topLeft.y);
         }
 
         internal function populate(level:int):void
@@ -33,12 +49,13 @@ package com.finegamedesign.subtletea
                 levelScores[level] = 0;
             }
             levelScore = 0;
-            target.x = -1;
-            target.y = -1;
+            randomlyPlace(target, bounds);
         }
 
         internal function clear():void
         {
+            target.x = -bounds.topLeft.x;
+            target.y = bounds.topLeft.y;
         }
 
         internal function update(now:int):int
@@ -51,7 +68,17 @@ package com.finegamedesign.subtletea
 
         internal function select(x:int, y:int):void
         {
-            trace("Model.select: " + x + ", " + y);
+            selected.x = x;
+            selected.y = y;
+            distance = Math.round(getDistance(selected, target)); 
+            trace("Model.select: distance " + distance + " selected " + x + ", " + y);
+            populate(level);
+        }
+
+        internal static function getDistance(pointA:Object, pointB:Object):Number
+        {
+            return Math.pow(pointA.x - pointB.x, 2)
+                 + Math.pow(pointA.y - pointB.y, 2);
         }
 
         /**
