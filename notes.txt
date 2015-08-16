@@ -1,0 +1,12 @@
+TODO
+	random position
+	click near
+	animate
+	difficulty levels:
+	scale
+	speed
+	opacity
+	hue
+	hues
+	intro animation:  buddha. tea cup.
+	level themes:  dragonwell, oolong, silver needle
