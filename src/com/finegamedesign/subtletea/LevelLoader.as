@@ -6,7 +6,7 @@ package com.finegamedesign.subtletea
     public class LevelLoader extends Sprite
     {
         internal static var levels:Array = [
-            0, 1, 2, 3
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9
         ];
 
         internal static var onLoaded:Function;

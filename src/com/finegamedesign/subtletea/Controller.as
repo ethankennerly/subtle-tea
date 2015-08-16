@@ -15,6 +15,7 @@ package com.finegamedesign.subtletea
         {
             scene.background.target.x = model.target.x;
             scene.background.target.y = model.target.y;
+            scene.background.target.alpha = model.target.alpha;
         }
 
         internal function update(now:int):int

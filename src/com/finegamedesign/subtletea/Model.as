@@ -9,7 +9,7 @@ package com.finegamedesign.subtletea
         internal var level:int;
         internal var levelScore:int = 0;
         internal var selected:Object = {x: -1, y: -1};
-        internal var target:Object = {x: -1, y: -1};
+        internal var target:Object = {x: -1, y: -1, alpha: 1.0};
         internal var trial:int = 0;
         internal var trialMax:int = 10;
         private var bounds:Object = {
@@ -19,6 +19,7 @@ package com.finegamedesign.subtletea
         private var now:int;
         private var complete:Boolean;
         private var elapsed:Number;
+        private var milliseconds:int;
         private var previousTime:int;
         private var populateTime:int;
         private var startTime:int;
@@ -87,6 +88,7 @@ package com.finegamedesign.subtletea
         {
             target.x = -bounds.topLeft.x;
             target.y = bounds.topLeft.y;
+            target.alpha = 0.0;
         }
 
         internal function update(now:int):int
@@ -96,8 +98,23 @@ package com.finegamedesign.subtletea
             elapsed = this.now - previousTime;
             levelScore += judge();
             mayPlaceNow();
+            milliseconds = now - startTime;
+            target.alpha = updateOpacity();
             updateScore();
             return win();
+        }
+
+        /**
+         * Fade in:  Slow at high level and high trial.
+         */
+        private function updateOpacity():Number
+        {
+            var perMillisecond:Number = 0.01;
+            perMillisecond /= level * level;
+            perMillisecond /= trial;
+            var opacity:Number = milliseconds * perMillisecond;
+            opacity = Math.min(1.0, opacity);
+            return opacity;
         }
 
         internal function judge():int
@@ -109,7 +126,6 @@ package com.finegamedesign.subtletea
                 distance = getDistance(selected, target);
                 points = Math.round(0.5 * max + distance * perDistance);
 
-                var milliseconds:int = now - startTime;
                 var perMillisecond:Number = -0.01;
                 points += Math.round(0.5 * max + milliseconds * perMillisecond);
                 points = Math.max(0, points);
