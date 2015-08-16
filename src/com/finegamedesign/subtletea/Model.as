@@ -21,6 +21,8 @@ package com.finegamedesign.subtletea
         private var elapsed:Number;
         private var previousTime:int;
         private var populateTime:int;
+        private var startTime:int;
+        private var waitTime:int;
 
         public function Model()
         {
@@ -48,16 +50,36 @@ package com.finegamedesign.subtletea
 
         internal function populate(level:int):void
         {
-            complete = trial < trialMax;
+            complete = trialMax <= trial;
             if (!complete) {
                 this.level = level;
                 if (null == levelScores[level]) {
                     levelScores[level] = 0;
                     levelScore = 0;
                 }
-                randomlyPlace(target, bounds);
                 populateTime = now;
+                waitTime = -1;
+                startTime = -1;
                 trial++;
+            }
+        }
+
+        private function mayPlaceNow():void
+        {
+            if (-1 == startTime) {
+                if (-1 == waitTime) {
+                    var waitMin:int = 1000;
+                    var waitMax:int = 3000;
+                    waitTime = (waitMax - waitMin) * Math.random() + waitMin;
+                }
+                var wait:int = now - populateTime;
+                if (waitTime <= wait) {
+                    randomlyPlace(target, bounds);
+                    startTime = now;
+                }
+                else {
+                    clear();
+                }
             }
         }
 
@@ -73,6 +95,7 @@ package com.finegamedesign.subtletea
             this.now = now;
             elapsed = this.now - previousTime;
             levelScore += judge();
+            mayPlaceNow();
             updateScore();
             return win();
         }
@@ -86,7 +109,7 @@ package com.finegamedesign.subtletea
                 distance = getDistance(selected, target);
                 points = Math.round(0.5 * max + distance * perDistance);
 
-                var milliseconds:int = now - populateTime;
+                var milliseconds:int = now - startTime;
                 var perMillisecond:Number = -0.01;
                 points += Math.round(0.5 * max + milliseconds * perMillisecond);
                 points = Math.max(0, points);
