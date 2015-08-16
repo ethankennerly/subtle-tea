@@ -17,6 +17,7 @@ package com.finegamedesign.subtletea
         private var now:int;
         private var elapsed:Number;
         private var previousTime:int;
+        private var populateTime:int;
 
         public function Model()
         {
@@ -50,6 +51,7 @@ package com.finegamedesign.subtletea
                 levelScore = 0;
             }
             randomlyPlace(target, bounds);
+            populateTime = now;
         }
 
         internal function clear():void
@@ -73,9 +75,13 @@ package com.finegamedesign.subtletea
             var points:int = 0;
             if (0 <= selected.x) {
                 var max:int = 100;
-                var perDistance:Number = 2.0;
-                distance = getDistance(selected, target); 
-                points = Math.round(max - distance * perDistance);
+                var perDistance:Number = -1.0;
+                distance = getDistance(selected, target);
+                points = Math.round(0.5 * max + distance * perDistance);
+
+                var milliseconds:int = now - populateTime;
+                var perMillisecond:Number = -0.01;
+                points += Math.round(0.5 * max + milliseconds * perMillisecond);
                 points = Math.max(0, points);
                 selected.x = -1;
                 selected.y = -1;
