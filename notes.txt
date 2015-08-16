@@ -1,12 +1,17 @@
+FEATURES
+	Random position.
+	If click near circle, increase score.  
+
 TODO
-	random position
-	click near
-	animate
+	if click fast, increase score.
+	random time to place.
+	after 12 trials, return to menu.
 	difficulty levels:
-	scale
-	speed
-	opacity
-	hue
-	hues
+		opacity
+		scale
+		speed
+		hue
+		hues
+	animate
 	intro animation:  buddha. tea cup.
 	level themes:  dragonwell, oolong, silver needle

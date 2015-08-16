@@ -7,7 +7,7 @@ package com.finegamedesign.subtletea
 
         internal var highScore:int;
         internal var level:int;
-        internal var levelScore:int;
+        internal var levelScore:int = 0;
         internal var selected:Object = {x: -1, y: -1};
         internal var target:Object = {x: -1, y: -1};
         private var bounds:Object = {
@@ -47,8 +47,8 @@ package com.finegamedesign.subtletea
             this.level = level;
             if (null == levelScores[level]) {
                 levelScores[level] = 0;
+                levelScore = 0;
             }
-            levelScore = 0;
             randomlyPlace(target, bounds);
         }
 
@@ -63,16 +63,32 @@ package com.finegamedesign.subtletea
             previousTime = 0 <= this.now ? this.now : now;
             this.now = now;
             elapsed = this.now - previousTime;
+            levelScore += judge();
+            updateScore();
             return win();
+        }
+
+        internal function judge():int
+        {
+            var points:int = 0;
+            if (0 <= selected.x) {
+                var max:int = 100;
+                var perDistance:Number = 2.0;
+                distance = getDistance(selected, target); 
+                points = Math.round(max - distance * perDistance);
+                points = Math.max(0, points);
+                selected.x = -1;
+                selected.y = -1;
+                populate(level);
+            }
+            return points;
         }
 
         internal function select(x:int, y:int):void
         {
             selected.x = x;
             selected.y = y;
-            distance = Math.round(getDistance(selected, target)); 
-            trace("Model.select: distance " + distance + " selected " + x + ", " + y);
-            populate(level);
+            trace("Model.select: " + x + ", " + y);
         }
 
         internal static function getDistance(pointA:Object, pointB:Object):Number
