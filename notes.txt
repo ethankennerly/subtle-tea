@@ -3,15 +3,19 @@ FEATURES
 	If click near circle, increase score.  
 	if click fast, increase score.
 	After 10 trials, return to menu.
+	Wait 1 to 3 seconds to place.
+	Fade in slower at high level and high trial.
 
 TODO
-	random time to place.
+	Slow down with trial squared and level squared.  
+		Test case:  2015-08-16 Level 1.  Jennifer Russ expects to realize it is difficult.
 	difficulty levels:
-		opacity
 		scale
-		speed
-		hue
-		hues
+		hue:  adjust color filter from background hue.
+	large and slow, to train vigilance while still staring forward.
+	slower fade in time.
 	animate
+	Alternate shapes
+	Alternate hues
 	intro animation:  buddha. tea cup.
 	level themes:  dragonwell, oolong, silver needle

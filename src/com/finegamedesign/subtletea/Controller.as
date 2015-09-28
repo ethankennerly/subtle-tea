@@ -28,6 +28,7 @@ package com.finegamedesign.subtletea
         internal function clear():void
         {
             model.clear();
+            scene.background.target.alpha = 0;
         }
     }
 }

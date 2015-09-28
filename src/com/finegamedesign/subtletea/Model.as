@@ -43,6 +43,9 @@ package com.finegamedesign.subtletea
             bounds.height = bounds.bottomRight.y - bounds.topLeft.y;
         }
 
+        /**
+         * Might be nice to shuffle bins and roll jitter in bin.
+         */
         private static function randomlyPlace(target:Object, bounds:Object):void
         {
             target.x = Math.round(Math.random() * bounds.width + bounds.topLeft.x);
@@ -70,7 +73,7 @@ package com.finegamedesign.subtletea
             if (-1 == startTime) {
                 if (-1 == waitTime) {
                     var waitMin:int = 1000;
-                    var waitMax:int = 3000;
+                    var waitMax:int = 8000;
                     waitTime = (waitMax - waitMin) * Math.random() + waitMin;
                 }
                 var wait:int = now - populateTime;
@@ -110,7 +113,7 @@ package com.finegamedesign.subtletea
         private function updateOpacity():Number
         {
             var perMillisecond:Number = 0.01;
-            perMillisecond /= level * level;
+            perMillisecond /= level * level * level;
             perMillisecond /= trial;
             var opacity:Number = milliseconds * perMillisecond;
             opacity = Math.min(1.0, opacity);
@@ -128,6 +131,7 @@ package com.finegamedesign.subtletea
 
                 var perMillisecond:Number = -0.01;
                 points += Math.round(0.5 * max + milliseconds * perMillisecond);
+                points *= level;
                 points = Math.max(0, points);
                 selected.x = -1;
                 selected.y = -1;
